@@ -97,25 +97,59 @@ def numberToBinary(num):
   """Takes a base10 number and converts to a binary string with 8 bits"""
   binary = ""
   #Convert from decimal to binary
+  value = 128
+  for i in range(8):
+    if num >= value:
+      binary = binary + "1"
+      num = num - value
+    else:
+      binary = binary + "0"
 
+    value = value // 2
 
   return binary
 
 def binaryToNumber(bin):
   """Takes a string binary value and converts it to a base10 integer."""
   decimal = 0
-
+  value = 128
+  for digit in bin:
+    if digit == '1':
+      decimal = decimal + value
+    value = value // 2
 
   return decimal
 
 def main():
   #Ask user if they want to encode/decode
+  print("Do you want to encode a message or decode a message?")
+  choice = input("Type 'encode' or 'decode': ")
+
+  filename = input("Enter the image file name (example: image.png): ")
+
+  img = Image.open(filename)
+
+  if choice == "encode":
+    msg = input("Enter the message you want to hide: ")
+    encode(img, msg)
+    print("Message hidden! Saved as secretImg.png")
+    img.close()
+
+  elif choice == "decode":
+    message = decode(img)
+    print("The hidden message is:", message)
+    img.close()
+
+  else:
+    print("That wasn't 'encode' or 'decode'. Please run the program again.")
+    
+  """
   myImg = Image.open('pki.png')
   myMsg = "This is a secret message I will hide in an image."
   encode(myImg, myMsg)
   myImg.close()
 
-  """
+
   yourImg = Image.open('secretImg.png')
   msg = decode(yourImg)
   print(msg)
